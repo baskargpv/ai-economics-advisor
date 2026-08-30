@@ -1,0 +1,114 @@
+{
+  "lastUpdated": "2026-08-25",
+  "sourcingNote": "Token/complexity defaults are illustrative starting points based on common patterns for each use-case type, not measured benchmarks. All fields are user-editable in the app — treat these as reasonable defaults, not facts about any specific deployment.",
+  "useCases": [
+    {
+      "id": "knowledge-assistant",
+      "label": "Knowledge / HR / IT assistant",
+      "description": "Answers employee questions against a defined, relatively narrow set of internal policy/process content.",
+      "suggestedArchitecture": "Simple prompt + light context (may not need full RAG if source content is small)",
+      "defaultInputTokens": 800,
+      "defaultOutputTokens": 300,
+      "complexityTier": "simple",
+      "minModelTier": "cheap",
+      "defaultSuccessRate": 0.85,
+      "mainCostDrivers": ["output tokens", "request volume"]
+    },
+    {
+      "id": "customer-service",
+      "label": "Customer service chatbot",
+      "description": "Conversational, history-aware support interactions, often with escalation paths to a human.",
+      "suggestedArchitecture": "Conversational, multi-turn context window",
+      "defaultInputTokens": 1200,
+      "defaultOutputTokens": 250,
+      "complexityTier": "simple-moderate",
+      "minModelTier": "cheap",
+      "defaultSuccessRate": 0.75,
+      "mainCostDrivers": ["conversation history re-sent each turn", "escalation rate"]
+    },
+    {
+      "id": "rag-enterprise-search",
+      "label": "RAG / enterprise search",
+      "description": "Retrieval-augmented generation over a larger, less curated document corpus.",
+      "suggestedArchitecture": "Retrieval + generation (vector search or hybrid search feeding the prompt)",
+      "defaultInputTokens": 2500,
+      "defaultOutputTokens": 400,
+      "complexityTier": "moderate",
+      "minModelTier": "mid",
+      "defaultSuccessRate": 0.8,
+      "mainCostDrivers": ["retrieved context size", "output tokens", "reranking/embedding overhead"]
+    },
+    {
+      "id": "coding-assistant",
+      "label": "Coding assistant",
+      "description": "Code generation, review, or debugging assistance. Often licensed per-seat rather than raw API in practice — flagged here as a caveat, not modeled as a licensing cost.",
+      "suggestedArchitecture": "Often a per-seat tool license rather than raw token billing",
+      "defaultInputTokens": 1500,
+      "defaultOutputTokens": 600,
+      "complexityTier": "moderate-complex",
+      "minModelTier": "mid",
+      "defaultSuccessRate": 0.7,
+      "mainCostDrivers": ["output tokens", "iteration/retry count"]
+    },
+    {
+      "id": "single-agent",
+      "label": "Single agent (tool-using)",
+      "description": "One agent making multiple tool calls in a chain to complete a task.",
+      "suggestedArchitecture": "Multi-call chain with tool/function calling",
+      "defaultInputTokens": 2000,
+      "defaultOutputTokens": 300,
+      "complexityTier": "complex",
+      "minModelTier": "mid",
+      "defaultSuccessRate": 0.65,
+      "mainCostDrivers": ["number of calls per task", "retries/loops", "tool-call overhead"]
+    },
+    {
+      "id": "multi-agent",
+      "label": "Multi-agent workflow",
+      "description": "Multiple specialised agents collaborating on a task, each with its own call chain.",
+      "suggestedArchitecture": "Multiple coordinated agents, often with an orchestrator",
+      "defaultInputTokens": 2500,
+      "defaultOutputTokens": 350,
+      "complexityTier": "complex",
+      "minModelTier": "mid",
+      "defaultSuccessRate": 0.6,
+      "mainCostDrivers": ["per-agent call volume", "orchestration overhead", "retries/loops"],
+      "costMultiplierNote": "Apply a 1.5x-3x multiplier over a single-agent base estimate for retries/loops, per common agentic-workload patterns."
+    },
+    {
+      "id": "classification-extraction",
+      "label": "Classification / extraction",
+      "description": "High-volume, low-complexity structured tasks — labeling, tagging, field extraction.",
+      "suggestedArchitecture": "Small/cheap model, high volume, often batched",
+      "defaultInputTokens": 300,
+      "defaultOutputTokens": 50,
+      "complexityTier": "simple",
+      "minModelTier": "cheap",
+      "defaultSuccessRate": 0.9,
+      "mainCostDrivers": ["request volume"]
+    },
+    {
+      "id": "custom",
+      "label": "Custom / other",
+      "description": "Use case doesn't fit the categories above, or the underlying task isn't token-based LLM economics at all (e.g. traditional ML/forecasting) — flag this rather than force-fitting it.",
+      "suggestedArchitecture": "User-defined",
+      "defaultInputTokens": null,
+      "defaultOutputTokens": null,
+      "complexityTier": null,
+      "minModelTier": null,
+      "defaultSuccessRate": null,
+      "mainCostDrivers": []
+    }
+  ],
+  "priorityWeightProfiles": {
+    "lowestCost": { "capabilityFit": 0.15, "costEfficiency": 0.6, "latencyFit": 0.15, "deploymentFit": 0.1 },
+    "highestQuality": { "capabilityFit": 0.6, "costEfficiency": 0.15, "latencyFit": 0.15, "deploymentFit": 0.1 },
+    "lowestLatency": { "capabilityFit": 0.2, "costEfficiency": 0.15, "latencyFit": 0.55, "deploymentFit": 0.1 },
+    "balanced": { "capabilityFit": 0.3, "costEfficiency": 0.3, "latencyFit": 0.25, "deploymentFit": 0.15 }
+  },
+  "adoptionScenarios": {
+    "low": 0.3,
+    "base": 0.6,
+    "high": 0.9
+  }
+}
