@@ -11,7 +11,7 @@ no API keys required to use it.
 
 ## Status
 
-🚧 Pre-deploy. Next steps (in order):
+✅ Live: **https://ai-economics-advisor.streamlit.app**
 
 1. ✅ Project scaffold (this)
 2. ✅ Data layer — `data/pricing.json`, `data/usecases.json`
@@ -19,7 +19,7 @@ no API keys required to use it.
 4. ✅ Form UI — Streamlit widgets for the progressive question flow (`ui/form.py`)
 5. ✅ Results UI — assessment / comparison screen (`ui/results.py`)
 6. ✅ Wire together + test against worked example end-to-end (`engine/pipeline.py`, `tests/test_pipeline.py`)
-7. ⬜ Deploy to Streamlit Community Cloud
+7. ✅ Deploy to Streamlit Community Cloud
 
 ## Local development
 
@@ -45,9 +45,9 @@ app.py           # Streamlit entry point
 ## Deployment
 
 - **Source of truth:** this GitHub repo.
-- **Live demo:** deployed via Streamlit Community Cloud, connected directly
-  to this repo — no GitHub Action needed, Streamlit rebuilds on every push
-  to `main`.
+- **Live demo:** https://ai-economics-advisor.streamlit.app — deployed via
+  Streamlit Community Cloud, connected directly to this repo — no GitHub
+  Action needed, Streamlit rebuilds on every push to `main`.
 
 ## Data sourcing
 
