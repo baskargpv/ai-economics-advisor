@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-08-25",
-  "sourcingNote": "Manually curated and reviewed. Seeded from official provider pricing pages (Anthropic, OpenAI, Google) and cross-checked against third-party pricing trackers. Periodically diffed against LiteLLM's model_prices_and_context_window.json (https://github.com/BerriAI/litellm) — see scripts/sync-pricing.py (added in a later step). Prices change frequently; verify against provider pricing pages before using this data for a real budget decision.",
+  "lastUpdated": "2026-08-30",
+  "sourcingNote": "Manually curated and reviewed. Seeded from official provider pricing pages (Anthropic, OpenAI, Google) and cross-checked against third-party pricing trackers. Periodically diffed against LiteLLM's model_prices_and_context_window.json (https://github.com/BerriAI/litellm) via scripts/sync-pricing.py \u2014 run as a dry-run diff, changes reviewed and applied by hand. Prices change frequently; verify against provider pricing pages before using this data for a real budget decision.",
   "currency": "USD",
   "unit": "per 1,000,000 tokens",
   "models": [
@@ -64,7 +64,7 @@
       "inputCostPerMillion": 0.2,
       "outputCostPerMillion": 1.2,
       "cachedInputCostPerMillion": 0.02,
-      "contextWindow": 1050000,
+      "contextWindow": 922000,
       "batchDiscountPct": 50,
       "notes": "Cost floor of the current-generation GPT-5.6 family; good for classification/extraction/summarization at volume.",
       "promotional": false
@@ -77,7 +77,7 @@
       "inputCostPerMillion": 2.0,
       "outputCostPerMillion": 12.0,
       "cachedInputCostPerMillion": 0.2,
-      "contextWindow": 1050000,
+      "contextWindow": 922000,
       "batchDiscountPct": 50,
       "notes": "Balanced tier for high-volume everyday business work.",
       "promotional": false
@@ -89,8 +89,8 @@
       "tier": "frontier",
       "inputCostPerMillion": 4.0,
       "outputCostPerMillion": 20.0,
-      "cachedInputCostPerMillion": 0.5,
-      "contextWindow": 1050000,
+      "cachedInputCostPerMillion": 0.4,
+      "contextWindow": 922000,
       "batchDiscountPct": 50,
       "notes": "Promotional pricing confirmed through Nov 21, 2026 (cut from $5/$30). Verify current rate before relying on this for long-term budgeting.",
       "promotional": true,
@@ -104,9 +104,9 @@
       "inputCostPerMillion": 0.25,
       "outputCostPerMillion": 1.5,
       "cachedInputCostPerMillion": 0.025,
-      "contextWindow": 1000000,
+      "contextWindow": 1048576,
       "batchDiscountPct": 50,
-      "notes": "Cheapest current Gemini tier with full 1M context — notable since competitors often reserve 1M context for frontier tiers only.",
+      "notes": "Cheapest current Gemini tier with full 1M context \u2014 notable since competitors often reserve 1M context for frontier tiers only.",
       "promotional": false
     },
     {
@@ -117,9 +117,9 @@
       "inputCostPerMillion": 0.75,
       "outputCostPerMillion": 3.75,
       "cachedInputCostPerMillion": 0.075,
-      "contextWindow": 1000000,
+      "contextWindow": 1048576,
       "batchDiscountPct": 50,
-      "notes": "Introductory pricing through Dec 31, 2026 — rises to $1.50/$7.50 on Jan 1, 2027. Update this entry when that takes effect.",
+      "notes": "Introductory pricing through Dec 31, 2026 \u2014 rises to $1.50/$7.50 on Jan 1, 2027. Update this entry when that takes effect.",
       "promotional": true,
       "promoEndDate": "2026-12-31"
     },
@@ -133,7 +133,7 @@
       "cachedInputCostPerMillion": 0.2,
       "contextWindow": 200000,
       "batchDiscountPct": 50,
-      "notes": "Rate applies up to 200K input tokens; rises to $4/$18 above that threshold. Not available on the free tier.",
+      "notes": "Rate applies up to 200K input tokens; rises to $4/$18 above that threshold (true max context is 1,048,576 — capped here since the engine doesn't yet model tiered pricing by input length). Not available on the free tier.",
       "promotional": false
     }
   ]
