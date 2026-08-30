@@ -140,8 +140,8 @@ def main():
 
     if args.write and any_changes:
         pricing_data["lastUpdated"] = date.today().isoformat()
-        with open(PRICING_PATH, "w") as f:
-            json.dump(pricing_data, f, indent=2)
+        with open(PRICING_PATH, "w", encoding="utf-8") as f:
+            json.dump(pricing_data, f, indent=2, ensure_ascii=False)
             f.write("\n")
         print(f"\nWrote updated prices to {PRICING_PATH}")
         print("Review the diff above, update any affected 'notes'/'promotional' fields by hand, and run pytest before committing.")
