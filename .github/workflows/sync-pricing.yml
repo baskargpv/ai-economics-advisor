@@ -1,0 +1,42 @@
+name: Sync pricing from LiteLLM
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # every Monday 06:00 UTC
+  workflow_dispatch: {}   # allow manual runs from the Actions tab
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-pricing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - name: Run pricing sync
+        run: python scripts/sync-pricing.py --write
+
+      - name: Open PR if prices changed
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Sync pricing.json against LiteLLM"
+          title: "Weekly pricing sync from LiteLLM"
+          body: |
+            Automated run of `scripts/sync-pricing.py --write`.
+
+            This diffs `data/pricing.json` against LiteLLM's
+            `model_prices_and_context_window.json` and applies any changed
+            numeric fields (price, context window). It does **not** touch
+            `notes`, `tier`, `displayName`, or `promotional` — review those
+            by hand if a price change affects their accuracy before merging.
+          branch: sync-pricing
+          delete-branch: true
+          labels: pricing-sync
