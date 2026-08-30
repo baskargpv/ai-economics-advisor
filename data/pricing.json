@@ -131,9 +131,9 @@
       "inputCostPerMillion": 2.0,
       "outputCostPerMillion": 12.0,
       "cachedInputCostPerMillion": 0.2,
-      "contextWindow": 200000,
+      "contextWindow": 1048576,
       "batchDiscountPct": 50,
-      "notes": "Rate applies up to 200K input tokens; rises to $4/$18 above that threshold (true max context is 1,048,576 — capped here since the engine doesn't yet model tiered pricing by input length). Not available on the free tier.",
+      "notes": "Rate applies up to 200K input tokens; rises to $4/$18 above that threshold (true max context is 1,048,576 \u2014 capped here since the engine doesn't yet model tiered pricing by input length). Not available on the free tier.",
       "promotional": false
     }
   ]
