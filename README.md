@@ -39,6 +39,7 @@ data/            # versioned pricing + use-case config (source of truth)
 engine/          # pure calculation functions — no side effects, fully testable
 ui/              # Streamlit widgets — form input collection and results rendering
 tests/           # pytest unit tests
+scripts/         # maintenance scripts (pricing sync — not run by the app itself)
 app.py           # Streamlit entry point
 ```
 
@@ -54,7 +55,21 @@ app.py           # Streamlit entry point
 Pricing is seeded from and periodically diffed against
 [LiteLLM's `model_prices_and_context_window.json`](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)
 (MIT licensed), then manually reviewed before being merged into
-`data/pricing.json`.
+`data/pricing.json`. The app itself never calls this or any other
+external API at runtime — pricing stays a static, versioned file, so a
+stale or broken upstream source never silently changes a number the app
+shows.
+
+To refresh the pricing table:
+
+```bash
+python scripts/sync-pricing.py            # dry run — prints a diff, changes nothing
+python scripts/sync-pricing.py --write    # applies the diff to data/pricing.json
+```
+
+`--write` only touches the numeric price/context-window fields — review
+the printed diff, update any affected `notes`/`promotional` fields by
+hand (the script won't infer those), run `pytest`, then commit.
 
 ## License
 
