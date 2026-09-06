@@ -50,6 +50,41 @@ def render_results(assessment, models):
         if bv["soft_benefit"]:
             st.caption(f"Plus ${bv['soft_benefit']:,.0f}/year in unmodeled soft/strategic benefit, not included above.")
 
+    if assessment["route_comparison"]:
+        st.header("Route comparison: Agent vs Human vs Hybrid")
+        st.caption(
+            "Expected total cost (execution cost + expected cost of failure) for each way of getting this "
+            "task done, instead of assuming it should be fully automated."
+        )
+        rc = assessment["route_comparison"]
+        rows = []
+        for name, r in rc["routes"].items():
+            rows.append(
+                {
+                    "Route": f"{name} ⭐" if name == rc["recommended_route"] else name,
+                    "Execution cost": f"${r['cost_exec']:.2f}",
+                    "Risk cost": f"${r['cost_risk']:.2f}",
+                    "Expected total cost": f"${r['expected_total_cost']:.2f}",
+                    "Success rate": f"{r['success_rate']:.0%}",
+                    "Cost / successful outcome": f"${r['cost_per_successful_outcome']:.2f}"
+                    if r["cost_per_successful_outcome"] is not None
+                    else "n/a",
+                }
+            )
+        st.table(rows)
+        if rc["recommended_route"] == "HUMAN":
+            st.write("**Recommended: HUMAN** — neither AGENT nor HYBRID beats the human-only baseline at these inputs.")
+        elif rc["savings_vs_human"] > 0:
+            st.write(
+                f"**Recommended: {rc['recommended_route']}** — saves ${rc['savings_vs_human']:,.2f} per task "
+                f"vs. the human-only baseline."
+            )
+        else:
+            st.write(
+                f"**Recommended: {rc['recommended_route']}** — no saving vs. the human-only baseline at these "
+                f"inputs (${-rc['savings_vs_human']:,.2f} more expensive)."
+            )
+
     st.header("Adoption sensitivity")
     st.caption("Same assumptions run across low/base/high adoption scenarios instead of one false-precise number.")
     rows = []

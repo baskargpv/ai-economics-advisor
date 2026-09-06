@@ -47,5 +47,6 @@ if inputs is not None:
         business_value_inputs=inputs["business_value_inputs"],
         initial_investment=inputs["initial_investment"],
         human_cost_per_request=inputs["human_cost_per_request"],
+        route_comparison_inputs=inputs["route_comparison_inputs"],
     )
     render_results(assessment, models)

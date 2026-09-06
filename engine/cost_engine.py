@@ -138,6 +138,18 @@ def calculate_business_value(
     }
 
 
+def calculate_risk_cost(failure_rate, cost_per_failure):
+    """
+    Expected cost of the failure path: the probability an attempt fails
+    times the cost of recovering from it (rework, re-triage, escalation to
+    a human who now has less context than if they'd done it first). This is
+    separate from — and additive to — the direct cost of doing the work,
+    which is what makes a high-failure-rate cheap option look worse than
+    its raw execution cost suggests.
+    """
+    return failure_rate * cost_per_failure
+
+
 def calculate_roi(annual_benefit, annual_cost):
     if annual_cost == 0:
         return None

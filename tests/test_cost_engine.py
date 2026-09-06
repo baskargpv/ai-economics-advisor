@@ -8,6 +8,7 @@ from engine.cost_engine import (
     calculate_roi,
     calculate_payback_months,
     calculate_business_value,
+    calculate_risk_cost,
 )
 
 # A representative mid-tier model for testing (matches Claude Sonnet 5's
@@ -122,3 +123,12 @@ def test_payback_months():
 
 def test_payback_months_returns_none_when_no_net_benefit():
     assert calculate_payback_months(initial_investment=100000, annual_net_benefit=0) is None
+
+
+def test_risk_cost_scales_with_failure_rate_and_cost():
+    # 25% failure rate, $40 to recover from a failed attempt
+    assert calculate_risk_cost(failure_rate=0.25, cost_per_failure=40) == pytest.approx(10, abs=0.001)
+
+
+def test_risk_cost_is_zero_at_zero_failure_rate():
+    assert calculate_risk_cost(failure_rate=0, cost_per_failure=1000) == 0
