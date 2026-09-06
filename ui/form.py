@@ -235,6 +235,45 @@ def render_assumptions_form(use_case, priority_profiles):
                     help="What it costs today to have a human fully handle one request, for a direct side-by-side comparison with the AI's cost per request.",
                 )
 
+        with st.expander("Advanced: route comparison — Agent vs Human vs Hybrid (optional)"):
+            st.caption(
+                "Needs 'Estimate ROI against a human/manual baseline' above turned on (it supplies the human "
+                "time & cost this comparison runs against)."
+            )
+            include_route_comparison = st.checkbox(
+                "Compare Agent-only, Human-only, and Hybrid as alternative ways to do this task",
+                value=False,
+                help="Instead of assuming the task should be fully automated, compares the expected total cost "
+                "(execution + expected cost of failure) of an agent doing it alone, a human doing it alone, or "
+                "an agent pre-processing for a human to finish.",
+            )
+            col11, col12 = st.columns(2)
+            with col11:
+                human_success_rate = st.slider(
+                    "Human success rate",
+                    0.0,
+                    1.0,
+                    0.97,
+                    help="Fraction of tasks a human doing this gets right without rework. Usually high, but rarely exactly 100%.",
+                )
+                cost_per_failure = st.number_input(
+                    "Cost of a failed attempt ($, rework / escalation)",
+                    min_value=0.0,
+                    value=20.0,
+                    step=5.0,
+                    help="Extra cost when an attempt fails and has to be redone or escalated — lost time, "
+                    "context-switching, re-triage. Applied to whichever route's attempt fails.",
+                )
+            with col12:
+                hybrid_time_saving_factor = st.slider(
+                    "Hybrid time-saving factor",
+                    0.0,
+                    1.0,
+                    0.5,
+                    help="Fraction of the human's task time saved when an AI pre-processes first and the human "
+                    "finishes/decides. 0 = pre-processing saves no time, 1 = the human does nothing.",
+                )
+
         submitted = st.form_submit_button("Calculate", type="primary")
 
     if not submitted:
@@ -272,4 +311,11 @@ def render_assumptions_form(use_case, priority_profiles):
         else None,
         "initial_investment": initial_investment,
         "human_cost_per_request": human_cost_per_request if human_cost_per_request > 0 else None,
+        "route_comparison_inputs": {
+            "human_success_rate": human_success_rate,
+            "cost_per_failure": cost_per_failure,
+            "hybrid_time_saving_factor": hybrid_time_saving_factor,
+        }
+        if include_route_comparison
+        else None,
     }

@@ -102,3 +102,55 @@ def test_run_assessment_wires_tco_and_business_value():
     assert result["business_value"]["defensible_benefit"] == pytest.approx(1_250_000 * 40 * 0.7, abs=1)
     assert result["roi"] is not None
     assert result["payback_months"] is not None
+    assert result["route_comparison"] is None  # not requested in this call
+
+
+def test_run_assessment_wires_route_comparison_when_requested():
+    result = run_assessment(
+        models=MODELS,
+        population=20000,
+        requests_per_user_per_day=5,
+        input_tokens_per_request=800,
+        output_tokens_per_request=300,
+        complexity_tier="simple",
+        min_model_tier="cheap",
+        weights=WEIGHTS,
+        adoption_scenarios=ADOPTION_SCENARIOS,
+        success_rate=0.85,
+        business_value_inputs={
+            "human_time_per_task_minutes": 5,
+            "loaded_hourly_cost": 40,
+            "productive_value_realisation_rate": 0.7,
+        },
+        route_comparison_inputs={
+            "human_success_rate": 0.97,
+            "cost_per_failure": 20.0,
+            "hybrid_time_saving_factor": 0.5,
+        },
+    )
+    rc = result["route_comparison"]
+    assert rc is not None
+    assert set(rc["routes"].keys()) == {"AGENT", "HUMAN", "HYBRID"}
+    # human_cost_per_task = 40 * (5/60) = $3.33, derived from business_value_inputs
+    assert rc["routes"]["HUMAN"]["cost_exec"] == pytest.approx(40 * (5 / 60), abs=0.01)
+
+
+def test_run_assessment_skips_route_comparison_without_business_value_inputs():
+    result = run_assessment(
+        models=MODELS,
+        population=20000,
+        requests_per_user_per_day=5,
+        input_tokens_per_request=800,
+        output_tokens_per_request=300,
+        complexity_tier="simple",
+        min_model_tier="cheap",
+        weights=WEIGHTS,
+        adoption_scenarios=ADOPTION_SCENARIOS,
+        success_rate=0.85,
+        route_comparison_inputs={
+            "human_success_rate": 0.97,
+            "cost_per_failure": 20.0,
+            "hybrid_time_saving_factor": 0.5,
+        },
+    )
+    assert result["route_comparison"] is None

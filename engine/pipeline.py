@@ -18,6 +18,7 @@ from engine.cost_engine import (
 )
 from engine.model_scoring import rank_models
 from engine.sensitivity import run_adoption_scenarios
+from engine.routing import compare_routes
 
 
 def run_assessment(
@@ -40,6 +41,7 @@ def run_assessment(
     human_cost_per_request=None,
     data_sensitivity=None,
     base_adoption_rate=None,
+    route_comparison_inputs=None,
 ):
     """
     Ranks candidate models, costs out the top-ranked one at the base
@@ -47,6 +49,12 @@ def run_assessment(
     sensitivity on that model. Returns `recommended_model: None` when no
     model meets `min_model_tier` — callers must check that before reading
     the rest of the result.
+
+    route_comparison_inputs: optional dict (human_success_rate,
+    cost_per_failure, hybrid_time_saving_factor) — when given alongside
+    business_value_inputs (which supplies the human cost baseline), also
+    returns a comparison of AGENT / HUMAN / HYBRID as alternative ways to
+    do the task, not just which model to use if it's automated.
     """
     base_adoption_rate = base_adoption_rate if base_adoption_rate is not None else adoption_scenarios["base"]
 
@@ -101,6 +109,18 @@ def run_assessment(
     }
     adoption_sensitivity = run_adoption_scenarios(base_inputs, adoption_scenarios, recommended_model, human_cost_per_request)
 
+    route_comparison = None
+    if business_value_inputs and route_comparison_inputs:
+        human_cost_per_task = business_value_inputs["loaded_hourly_cost"] * (
+            business_value_inputs["human_time_per_task_minutes"] / 60
+        )
+        route_comparison = compare_routes(
+            agent_cost_per_task=cost_per_request,
+            agent_success_rate=success_rate,
+            human_cost_per_task=human_cost_per_task,
+            **route_comparison_inputs,
+        )
+
     return {
         "ranking": ranking,
         "recommended_model": recommended_model,
@@ -115,4 +135,5 @@ def run_assessment(
         "roi": roi,
         "payback_months": payback_months,
         "adoption_sensitivity": adoption_sensitivity,
+        "route_comparison": route_comparison,
     }
