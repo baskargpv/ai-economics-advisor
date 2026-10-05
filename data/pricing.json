@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-08-30",
-  "sourcingNote": "Manually curated and reviewed. Seeded from official provider pricing pages (Anthropic, OpenAI, Google) and cross-checked against third-party pricing trackers. Periodically diffed against LiteLLM's model_prices_and_context_window.json (https://github.com/BerriAI/litellm) via scripts/sync-pricing.py \u2014 run as a dry-run diff, changes reviewed and applied by hand. Prices change frequently; verify against provider pricing pages before using this data for a real budget decision.",
+  "lastUpdated": "2026-10-05",
+  "sourcingNote": "Manually curated and reviewed. Seeded from official provider pricing pages (Anthropic, OpenAI, Google) and cross-checked against third-party pricing trackers. Periodically diffed against LiteLLM's model_prices_and_context_window.json (https://github.com/BerriAI/litellm) via scripts/sync-pricing.py — run as a dry-run diff, changes reviewed and applied by hand. Prices change frequently; verify against provider pricing pages before using this data for a real budget decision.",
   "currency": "USD",
   "unit": "per 1,000,000 tokens",
   "models": [
@@ -106,7 +106,7 @@
       "cachedInputCostPerMillion": 0.025,
       "contextWindow": 1048576,
       "batchDiscountPct": 50,
-      "notes": "Cheapest current Gemini tier with full 1M context \u2014 notable since competitors often reserve 1M context for frontier tiers only.",
+      "notes": "Cheapest current Gemini tier with full 1M context — notable since competitors often reserve 1M context for frontier tiers only.",
       "promotional": false
     },
     {
@@ -119,7 +119,7 @@
       "cachedInputCostPerMillion": 0.075,
       "contextWindow": 1048576,
       "batchDiscountPct": 50,
-      "notes": "Introductory pricing through Dec 31, 2026 \u2014 rises to $1.50/$7.50 on Jan 1, 2027. Update this entry when that takes effect.",
+      "notes": "Introductory pricing through Dec 31, 2026 — rises to $1.50/$7.50 on Jan 1, 2027. Update this entry when that takes effect.",
       "promotional": true,
       "promoEndDate": "2026-12-31"
     },
@@ -131,7 +131,7 @@
       "inputCostPerMillion": 2.0,
       "outputCostPerMillion": 12.0,
       "cachedInputCostPerMillion": 0.2,
-      "contextWindow": 200000,
+      "contextWindow": 1048576,
       "batchDiscountPct": 50,
       "notes": "Rate applies up to 200K input tokens; rises to $4/$18 above that threshold (true max context is 1,048,576 — capped here since the engine doesn't yet model tiered pricing by input length). Not available on the free tier.",
       "promotional": false
